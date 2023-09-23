@@ -163,6 +163,32 @@ public class Space3D {
     }
 
     /**
+     * Returns a copy of this space with shifted points
+     *
+     * @param scale scale factor
+     * @return new space with scaled points
+     */
+    public Space3D scaledCopy(float scale) {
+        return this.scaledCopy(scale, scale, scale);
+    }
+
+    /**
+     * Returns a copy of this space with scaled points
+     *
+     * @param scaleX scale factor on the X axis
+     * @param scaleY scale factor on the Y axis
+     * @param scaleZ scale factor on the Z axis
+     * @return new space with scaled points
+     */
+    public Space3D scaledCopy(float scaleX, float scaleY, float scaleZ) {
+        Space3D space = new Space3D();
+        this.points.forEach(point -> space.addPoint(point.clone()));
+        space.scale(scaleX, scaleY, scaleZ);
+        return space;
+    }
+
+
+    /**
      * Returns all points in the given range
      *
      * @param first  first point

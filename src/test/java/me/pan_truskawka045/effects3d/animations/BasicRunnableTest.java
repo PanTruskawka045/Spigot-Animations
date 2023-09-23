@@ -30,7 +30,7 @@ public class BasicRunnableTest {
     @Test
     public void testFinnish(){
         AnimationManager manager = new AnimationManager();
-        manager.newAnimation().finish();
+        Animation animation = manager.newAnimation().finish();
         manager.tick();
         manager.tick();
         Field animations = manager.getClass().getDeclaredField("animations");

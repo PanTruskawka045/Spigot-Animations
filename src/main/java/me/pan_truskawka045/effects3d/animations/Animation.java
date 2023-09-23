@@ -1,6 +1,7 @@
 package me.pan_truskawka045.effects3d.animations;
 
 import me.pan_truskawka045.effects3d.animations.frames.*;
+import me.pan_truskawka045.effects3d.animations.values.EaseValue;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -17,13 +18,14 @@ import java.util.function.Consumer;
  *         animation.then(() -> System.out.println("Hello world!"))
  *         .sleep(20)
  *         .then(() -> System.out.println("Hello world again!"))
- *         .finnish();
+ *         .finish();
  *         }
  *         </pre>
  *
  * @author pan_truskawka045
  * @since 1.0
  */
+@SuppressWarnings("unused")
 public class Animation extends AbstractFrame {
 
     private final AnimationManager manager;
@@ -84,7 +86,7 @@ public class Animation extends AbstractFrame {
      */
     @Override
     public boolean isFinished() {
-        return (last != null && last.isFinished()) || stopped;
+        return (last != null && last.isFinished() && last == current) || stopped;
     }
 
     /**
@@ -305,11 +307,30 @@ public class Animation extends AbstractFrame {
         return this;
     }
 
+    public Animation easeFunctions(int steps, int ticksPerStep, Consumer<float[]> consumer, EaseValue... easeValues) {
+        this.addFrame(new MultipleEaseFunctionsFrame(easeValues, consumer, steps, ticksPerStep));
+        return this;
+    }
+
+    public Animation easeFunctions(int steps, int ticksPerStep, Consumer<float[]> consumer, List<EaseValue> easeValues) {
+        this.addFrame(new MultipleEaseFunctionsFrame(easeValues.toArray(new EaseValue[0]), consumer, steps, ticksPerStep));
+        return this;
+    }
+
+    public Animation easeFunctions(int steps, Consumer<float[]> consumer, EaseValue easeValue) {
+        this.addFrame(new MultipleEaseFunctionsFrame(new EaseValue[]{easeValue}, consumer, steps, 1));
+        return this;
+    }
+
+
     /**
      * Means the animation is finished, and won't be ticked anymore
+     *
+     * @return current animation
      */
-    public void finish() {
+    public Animation finish() {
         this.addFrame(new FinnishFrame(this));
+        return this;
     }
 
     /**
