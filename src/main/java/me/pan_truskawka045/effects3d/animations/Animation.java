@@ -307,18 +307,66 @@ public class Animation extends AbstractFrame {
         return this;
     }
 
+
+    /**
+     * Runs {@param steps} steps per {@param ticksPerStep} ticks, easing the values with {@param easeFunction}
+     *
+     * @param steps        steps to take
+     * @param ticksPerStep ticks between each step
+     * @param consumer     consumer with <code>float[]</code> as
+     * @param easeValues   ease values
+     * @return current animation
+     */
     public Animation easeFunctions(int steps, int ticksPerStep, Consumer<float[]> consumer, EaseValue... easeValues) {
         this.addFrame(new MultipleEaseFunctionsFrame(easeValues, consumer, steps, ticksPerStep));
         return this;
     }
 
+    /**
+     * Runs {@param steps} steps per {@param ticksPerStep} ticks, easing the values with {@param easeFunction}
+     *
+     * @param steps        steps to take
+     * @param ticksPerStep ticks between each step
+     * @param consumer     consumer with <code>float[]</code> as
+     * @param easeValues   ease values
+     * @return current animation
+     */
     public Animation easeFunctions(int steps, int ticksPerStep, Consumer<float[]> consumer, List<EaseValue> easeValues) {
         this.addFrame(new MultipleEaseFunctionsFrame(easeValues.toArray(new EaseValue[0]), consumer, steps, ticksPerStep));
         return this;
     }
 
+    /**
+     * Runs {@param steps} steps, each per tick, easing the values with {@param easeFunction}
+     *
+     * @param steps     steps to take
+     * @param consumer  consumer with <code>float[]</code> as
+     * @param easeValue ease value
+     * @return current animation
+     */
     public Animation easeFunctions(int steps, Consumer<float[]> consumer, EaseValue easeValue) {
         this.addFrame(new MultipleEaseFunctionsFrame(new EaseValue[]{easeValue}, consumer, steps, 1));
+        return this;
+    }
+
+    /**
+     * Waits for {@param animations} to finish
+     *
+     * @param animations animations to wait for
+     * @return current animation
+     */
+    public Animation waitForCompletion(Animation... animations) {
+        this.addFrame(new WaitForCompletion(animations));
+        return this;
+    }
+
+    /**
+     * Makes animation never end
+     *
+     * @return current animation
+     */
+    public Animation looped() {
+        this.loop = true;
         return this;
     }
 
