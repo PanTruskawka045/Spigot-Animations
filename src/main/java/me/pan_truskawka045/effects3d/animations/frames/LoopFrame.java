@@ -20,9 +20,6 @@ public class LoopFrame<T> extends AbstractFrame {
         if (++ticks % ticksPerStep == 0) {
             consumer.accept(list.get(pointer));
             pointer++;
-            if (pointer >= list.size()) {
-                pointer = 0;
-            }
         }
     }
 
