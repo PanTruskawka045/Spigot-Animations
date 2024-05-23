@@ -6,6 +6,7 @@ import me.pan_truskawka045.effects3d.animations.values.EaseValue;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Animation class
@@ -359,6 +360,17 @@ public class Animation extends AbstractFrame {
         this.addFrame(new WaitForCompletion(animations));
         return this;
     }
+
+
+    /**
+     * @param condition condition to continue. If falsy the animation will stop
+     * @return current animation
+     */
+    public Animation continueIf(Predicate<Animation> condition) {
+        this.addFrame(new ConditionalStopFrame(this, condition));
+        return this;
+    }
+
 
     /**
      * Makes animation never end
