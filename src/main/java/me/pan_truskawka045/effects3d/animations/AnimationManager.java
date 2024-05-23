@@ -11,7 +11,7 @@ public class AnimationManager {
     /**
      * Ticks all animations
      */
-    public void tick(){
+    public void tick() {
         animations.removeAll(animationsToRemove);
         animationsToRemove.clear();
         animations.forEach(Animation::tick);
@@ -19,9 +19,10 @@ public class AnimationManager {
 
     /**
      * Creates new animation which will be ticked
+     *
      * @return new animation
      */
-    public Animation newAnimation(){
+    public Animation newAnimation() {
         Animation animation = new Animation(this);
         animations.add(animation);
         return animation;
@@ -29,18 +30,29 @@ public class AnimationManager {
 
     /**
      * Creates new animation which won't be ticked
+     *
      * @return new animation
      */
-    public Animation of(){
+    public Animation of() {
         return new Animation(this);
     }
 
     /**
      * Stops animation
-     * @param animation
+     *
+     * @param animation animation to stop
      */
-    public void stopAnimation(Animation animation){
+    public void stopAnimation(Animation animation) {
         animationsToRemove.add(animation);
+    }
+
+    /**
+     * Disposes all animations
+     */
+    public void dispose() {
+        animations.forEach(Animation::stop);
+        animations.clear();
+        animationsToRemove.clear();
     }
 
 }
