@@ -3,6 +3,7 @@ package me.pan_truskawka045.effects3d.points;
 import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class Space3DGraphics {
         double xStep = diffX / pointsCount;
         double yStep = diffY / pointsCount;
         double zStep = diffZ / pointsCount;
-        List<Point> points = new ArrayList<>();
+        List<Point> points = new LinkedList<>();
         for (int i = 0; i <= pointsCount; i++) {
             points.add(new Point(
                     point1.getX() + xStep * i,
@@ -50,7 +51,7 @@ public class Space3DGraphics {
      * @return list of created points
      */
     public List<Point> drawCircle(Point center, float radius, float distanceBetweenPoints) {
-        List<Point> points = new ArrayList<>();
+        List<Point> points = new LinkedList<>();
         float circumference = (float) (2 * Math.PI * radius);
         int pointsCount = (int) (circumference / distanceBetweenPoints);
         float step = (float) (Math.PI * 2 / pointsCount);
@@ -59,7 +60,7 @@ public class Space3DGraphics {
             points.add(new Point(
                     center.getX() + radius * (float) Math.cos(i),
                     center.getY(),
-                    center.getY() + radius * (float) Math.sin(i)));
+                    center.getZ() + radius * (float) Math.sin(i)));
         }
         return points;
     }
