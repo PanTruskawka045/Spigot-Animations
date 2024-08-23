@@ -389,6 +389,16 @@ public class Animation extends AbstractFrame {
         return this;
     }
 
+    public Animation runWhile(Runnable runnable, Predicate<Animation> condition) {
+        this.addFrame(new RepeatUntilFrame(1, runnable, condition, this));
+        return this;
+    }
+
+    public Animation runWhile(int delay, Runnable runnable, Predicate<Animation> condition) {
+        this.addFrame(new RepeatUntilFrame(delay, runnable, condition, this));
+        return this;
+    }
+
 
     /**
      * Makes animation never end
