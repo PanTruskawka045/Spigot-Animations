@@ -1,9 +1,10 @@
 package me.pan_truskawka045.effects3d.animations;
 
+import lombok.Getter;
 import me.pan_truskawka045.effects3d.animations.frames.*;
 import me.pan_truskawka045.effects3d.animations.values.EaseValue;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -36,6 +37,8 @@ public class Animation extends AbstractFrame {
     private boolean stopped = false;
     private boolean loop = false;
     private BiConsumer<Exception, Animation> exceptionHandler;
+    @Getter
+    private final Map<String, Animation> parallelAnimations = new HashMap<>();
 
     public Animation(AnimationManager manager) {
         this.manager = manager;
@@ -63,6 +66,11 @@ public class Animation extends AbstractFrame {
                 current = current.getNextFrame();
                 if (current == null) {
                     last = null;
+                }
+            }
+            for (Animation value : parallelAnimations.values()) {
+                if (!value.isFinished()) {
+                    value.tick();
                 }
             }
         } catch (Exception exc) {
@@ -368,6 +376,16 @@ public class Animation extends AbstractFrame {
      */
     public Animation continueIf(Predicate<Animation> condition) {
         this.addFrame(new ConditionalStopFrame(this, condition));
+        return this;
+    }
+
+    public Animation runInParallel(String name, Animation animation) {
+        parallelAnimations.put(name, animation);
+        return this;
+    }
+
+    public Animation join(String... animations) {
+        this.addFrame(new JoinAnimationsFrame(this, new HashSet<>(Arrays.asList(animations))));
         return this;
     }
 
