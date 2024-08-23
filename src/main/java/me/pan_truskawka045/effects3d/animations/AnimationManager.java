@@ -1,20 +1,36 @@
 package me.pan_truskawka045.effects3d.animations;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.List;
 
 public class AnimationManager {
 
     private final List<Animation> animations = new ArrayList<>();
     private final List<Animation> animationsToRemove = new ArrayList<>();
+    private final Object SYNC = new Object();
 
     /**
      * Ticks all animations
      */
     public void tick() {
-        animations.removeAll(animationsToRemove);
-        animationsToRemove.clear();
-        animations.forEach(Animation::tick);
+        synchronized (SYNC) {
+            Iterator<Animation> iterator = animations.iterator();
+            while (iterator.hasNext()) {
+                try {
+                    Animation animation = iterator.next();
+                    if (animation.isFinished() || animationsToRemove.contains(animation)) {
+                        animation.stop();
+                        iterator.remove();
+                        continue;
+                    }
+                    animation.tick();
+                } catch (ConcurrentModificationException e) {
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -24,7 +40,9 @@ public class AnimationManager {
      */
     public Animation newAnimation() {
         Animation animation = new Animation(this);
-        animations.add(animation);
+        synchronized (SYNC) {
+            animations.add(animation);
+        }
         return animation;
     }
 
@@ -50,9 +68,11 @@ public class AnimationManager {
      * Disposes all animations
      */
     public void dispose() {
-        animations.forEach(Animation::stop);
-        animations.clear();
-        animationsToRemove.clear();
+        synchronized (SYNC) {
+            animations.forEach(Animation::stop);
+            animations.clear();
+            animationsToRemove.clear();
+        }
     }
 
 }
