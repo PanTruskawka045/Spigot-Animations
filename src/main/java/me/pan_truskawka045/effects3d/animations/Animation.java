@@ -380,7 +380,7 @@ public class Animation extends AbstractFrame {
     }
 
     public Animation runInParallel(String name, Animation animation) {
-        parallelAnimations.put(name, animation);
+        this.addFrame(new RunInParallelFrame(animation, name, this));
         return this;
     }
 

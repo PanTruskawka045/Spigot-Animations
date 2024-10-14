@@ -4,30 +4,23 @@ import lombok.RequiredArgsConstructor;
 import me.pan_truskawka045.effects3d.animations.AbstractFrame;
 import me.pan_truskawka045.effects3d.animations.Animation;
 
-import java.util.Set;
-
 @RequiredArgsConstructor
-public class JoinAnimationsFrame extends AbstractFrame {
+public class RunInParallelFrame extends AbstractFrame {
 
     private final Animation animation;
-    private final Set<String> animations;
+    private final String name;
+    private final Animation parent;
+
 
     @Override
     public void tick() {
-
+        if (!animation.getParallelAnimations().containsKey(name)) {
+            parent.getParallelAnimations().put(name, animation);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        for (String s : animations) {
-            if (!animation.getParallelAnimations().containsKey(s)) {
-                continue;
-            }
-            if (!animation.getParallelAnimations().get(s).isFinished()) {
-                return false;
-            }
-        }
-
         return true;
     }
 }
