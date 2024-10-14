@@ -3,12 +3,14 @@ package me.pan_truskawka045.effects3d.points;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 
+@Setter
+@Getter
+@ToString
 public class Point implements Cloneable{
 
-    @Getter
-    @Setter
     private float x, y, z;
 
     public Point(float x, float y, float z) {
