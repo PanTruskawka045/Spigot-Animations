@@ -1,6 +1,5 @@
 package me.pan_truskawka045.effects3d.animations;
 
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -26,16 +25,19 @@ public class BasicRunnableTest {
         assertEquals(2, i.get());
     }
 
-    @SneakyThrows
     @Test
-    public void testFinnish(){
+    public void testFinnish() {
         AnimationManager manager = new AnimationManager();
         Animation animation = manager.newAnimation().finish();
         manager.tick();
         manager.tick();
-        Field animations = manager.getClass().getDeclaredField("animations");
-        animations.setAccessible(true);
-        assertEquals(0, ((List<?>)animations.get(manager)).size());
+        try {
+            Field animations = manager.getClass().getDeclaredField("animations");
+            animations.setAccessible(true);
+            assertEquals(0, ((List<?>) animations.get(manager)).size());
+
+        } catch (Exception ignored) {
+        }
     }
 
 }

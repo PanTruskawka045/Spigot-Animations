@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @NoArgsConstructor
+@SuppressWarnings("unused")
 public class Space3D {
 
-    @Getter
     private final List<Point> points = new ArrayList<>();
 
     /**

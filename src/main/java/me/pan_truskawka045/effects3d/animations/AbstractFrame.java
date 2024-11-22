@@ -3,10 +3,10 @@ package me.pan_truskawka045.effects3d.animations;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class AbstractFrame{
+@Getter
+@Setter
+public abstract class AbstractFrame {
 
-    @Getter
-    @Setter
     private AbstractFrame nextFrame;
 
     /**
@@ -22,6 +22,7 @@ public abstract class AbstractFrame{
     /**
      * Resets the frame to its initial state. Don't have to be implemented.
      */
-    public void reset(){}
+    public void reset() {
+    }
 
 }
