@@ -379,21 +379,51 @@ public class Animation extends AbstractFrame {
         return this;
     }
 
+
+    /**
+     * Runs the given animation in parallel with the current animation.
+     *
+     * @param name      the name of the parallel animation
+     * @param animation the animation to run in parallel
+     * @return current animation
+     */
     public Animation runInParallel(String name, Animation animation) {
         this.addFrame(new RunInParallelFrame(animation, name, this));
         return this;
     }
 
+    /**
+     * Joins the given animations with the current animation.
+     * If the joined animations are not finished, the current animation will wait for them to finish.
+     *
+     * @param animations the animations to join
+     * @return current animation
+     */
     public Animation join(String... animations) {
         this.addFrame(new JoinAnimationsFrame(this, new HashSet<>(Arrays.asList(animations))));
         return this;
     }
 
+
+    /**
+     * Runs the given runnable while the condition is falsy
+     * @param runnable runnable to run
+     * @param condition condition to stop
+     * @return current animation
+     */
     public Animation runWhile(Runnable runnable, Predicate<Animation> condition) {
         this.addFrame(new RepeatUntilFrame(1, runnable, condition, this));
         return this;
     }
 
+    /**
+     * Runs the given runnable while the condition is falsy
+     *
+     * @param delay     delay between each run in ticks
+     * @param runnable  runnable to run
+     * @param condition condition to stop
+     * @return current animation
+     */
     public Animation runWhile(int delay, Runnable runnable, Predicate<Animation> condition) {
         this.addFrame(new RepeatUntilFrame(delay, runnable, condition, this));
         return this;
