@@ -1,7 +1,6 @@
 package me.pan_truskawka045.effects3d.points;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -9,7 +8,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Point implements Cloneable{
+public class Point implements Cloneable {
 
     private float x, y, z;
 
@@ -35,7 +34,7 @@ public class Point implements Cloneable{
         rotateZ(zAngle);
     }
 
-    public void rotateX(float angle){
+    public void rotateX(float angle) {
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
         float x = this.x;
@@ -47,7 +46,7 @@ public class Point implements Cloneable{
         this.z = z;
     }
 
-    public void rotateY(float angle){
+    public void rotateY(float angle) {
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
         float x = this.x * cos + this.z * sin;
@@ -59,7 +58,7 @@ public class Point implements Cloneable{
         this.z = z;
     }
 
-    public void rotateZ(float angle){
+    public void rotateZ(float angle) {
         float cos = (float) Math.cos(angle);
         float sin = (float) Math.sin(angle);
         float x = this.x * cos - this.y * sin;
@@ -71,12 +70,17 @@ public class Point implements Cloneable{
         this.z = z;
     }
 
+    public void scale(float scale) {
+        x *= scale;
+        y *= scale;
+        z *= scale;
+    }
 
     public float distance(Point point) {
         return (float) Math.sqrt(distanceSquare(point));
     }
 
-    public float distanceSquare(Point point){
+    public float distanceSquare(Point point) {
         return (float) (Math.pow(point.getX() - x, 2) + Math.pow(point.getY() - y, 2) + Math.pow(point.getZ() - z, 2));
     }
 

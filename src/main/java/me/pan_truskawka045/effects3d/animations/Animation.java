@@ -407,7 +407,8 @@ public class Animation extends AbstractFrame {
 
     /**
      * Runs the given runnable while the condition is falsy
-     * @param runnable runnable to run
+     *
+     * @param runnable  runnable to run
      * @param condition condition to stop
      * @return current animation
      */
@@ -426,6 +427,39 @@ public class Animation extends AbstractFrame {
      */
     public Animation runWhile(int delay, Runnable runnable, Predicate<Animation> condition) {
         this.addFrame(new RepeatUntilFrame(delay, runnable, condition, this));
+        return this;
+    }
+
+    /**
+     * Will join already running animations and wait for them to finish
+     * @param animations animations to join
+     * @return current animation
+     */
+    public Animation join(Animation... animations) {
+        JoinIndependentAnimationsFrame frame = new JoinIndependentAnimationsFrame(Arrays.asList(animations), false);
+        this.addFrame(frame);
+        return this;
+    }
+
+    /**
+     * Will join already running animations and wait for them to finish
+     * @param animations animations to join
+     * @return current animation
+     */
+    public Animation join(Collection<Animation> animations) {
+        JoinIndependentAnimationsFrame frame = new JoinIndependentAnimationsFrame(animations, false);
+        this.addFrame(frame);
+        return this;
+    }
+
+    /**
+     * Will join already running animations and wait for them to finish and will remove them from the list
+     * @param animations animations to join
+     * @return current animation
+     */
+    public Animation joinAndRemove(Collection<Animation> animations) {
+        JoinIndependentAnimationsFrame frame = new JoinIndependentAnimationsFrame(animations, true);
+        this.addFrame(frame);
         return this;
     }
 
