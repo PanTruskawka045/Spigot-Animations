@@ -194,5 +194,13 @@ public class Space3DGraphics {
         return points;
     }
 
+    public Point lerp(Point point, Point target, float alpha) {
+        return new Point(
+                point.getX() + (target.getX() - point.getX()) * alpha,
+                point.getY() + (target.getY() - point.getY()) * alpha,
+                point.getZ() + (target.getZ() - point.getZ()) * alpha
+        );
+    }
+
 
 }
