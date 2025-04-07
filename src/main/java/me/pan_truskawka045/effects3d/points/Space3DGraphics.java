@@ -1,6 +1,7 @@
 package me.pan_truskawka045.effects3d.points;
 
 import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -194,12 +195,49 @@ public class Space3DGraphics {
         return points;
     }
 
-    public Point lerp(Point point, Point target, float alpha) {
+    public Point lerp(@NotNull Point point, @NotNull Point target, float alpha) {
         return new Point(
                 point.getX() + (target.getX() - point.getX()) * alpha,
                 point.getY() + (target.getY() - point.getY()) * alpha,
                 point.getZ() + (target.getZ() - point.getZ()) * alpha
         );
+    }
+
+    public List<Point> drawQuadratic(@NotNull Point point1, @NotNull Point point2, float aFactor, float distanceBetweenPoints) {
+        List<Point> points = new LinkedList<>();
+        float horizontalDistance = point1.horizontalDistance(point2);
+        float halfDistance = horizontalDistance / 2;
+        float currentX = -halfDistance;
+
+        while (currentX <= halfDistance) {
+            float normalizedX = (currentX + halfDistance) / horizontalDistance;
+            Point linear1 = lerp(point1, point2, normalizedX);
+            float quadratic1 = aFactor * (currentX - halfDistance) * (currentX + halfDistance);
+            float y1 = linear1.getY() + quadratic1;
+
+            float currentX2 = currentX + distanceBetweenPoints;
+            float normalizedX2 = (currentX2 + halfDistance) / horizontalDistance;
+
+            Point linear2 = lerp(point1, point2, normalizedX2);
+            float quadratic2 = aFactor * (currentX2 - halfDistance) * (currentX2 + halfDistance);
+            float y2 = linear2.getY() + quadratic2;
+
+            float diffY = y2 - y1;
+            float distance = (float) Math.sqrt(diffY * diffY + distanceBetweenPoints * distanceBetweenPoints);
+
+            float derivedDistance = distanceBetweenPoints / distance;
+
+            float actualNormalizedX = (currentX + derivedDistance + halfDistance) / horizontalDistance;
+
+            Point linear3 = lerp(point1, point2, actualNormalizedX);
+            float quadratic3 = aFactor * (currentX + derivedDistance - halfDistance) * (currentX + derivedDistance + halfDistance);
+
+            float y3 = linear3.getY() + quadratic3;
+
+            points.add(new Point(linear3.getX(), y3, linear3.getZ()));
+            currentX += derivedDistance;
+        }
+        return points;
     }
 
 

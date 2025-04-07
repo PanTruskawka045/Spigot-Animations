@@ -3,6 +3,7 @@ package me.pan_truskawka045.effects3d.points;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.jetbrains.annotations.NotNull;
 
 
 @Setter
@@ -76,12 +77,20 @@ public class Point implements Cloneable {
         z *= scale;
     }
 
-    public float distance(Point point) {
+    public float distance(@NotNull Point point) {
         return (float) Math.sqrt(distanceSquare(point));
     }
 
-    public float distanceSquare(Point point) {
+    public float distanceSquare(@NotNull Point point) {
         return (float) (Math.pow(point.getX() - x, 2) + Math.pow(point.getY() - y, 2) + Math.pow(point.getZ() - z, 2));
+    }
+
+    public float horizontalDistanceSquared(@NotNull Point point) {
+        return (float) (Math.pow(point.getX() - x, 2) + Math.pow(point.getZ() - z, 2));
+    }
+
+    public float horizontalDistance(@NotNull Point point) {
+        return (float) Math.sqrt(horizontalDistanceSquared(point));
     }
 
     @Override
