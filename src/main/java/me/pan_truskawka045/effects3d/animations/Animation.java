@@ -432,6 +432,7 @@ public class Animation extends AbstractFrame {
 
     /**
      * Will join already running animations and wait for them to finish
+     *
      * @param animations animations to join
      * @return current animation
      */
@@ -443,6 +444,7 @@ public class Animation extends AbstractFrame {
 
     /**
      * Will join already running animations and wait for them to finish
+     *
      * @param animations animations to join
      * @return current animation
      */
@@ -454,6 +456,7 @@ public class Animation extends AbstractFrame {
 
     /**
      * Will join already running animations and wait for them to finish and will remove them from the list
+     *
      * @param animations animations to join
      * @return current animation
      */
@@ -463,6 +466,33 @@ public class Animation extends AbstractFrame {
         return this;
     }
 
+
+    /**
+     * Awaits a notification to proceed with the animation.
+     * The provided listener will be used to handle the notification logic.
+     *
+     * @param listener a consumer that accepts an `AwaitNotifyAnimationFrame.AwaitNotifyListener`
+     *                 to handle the notification process
+     * @return the current animation instance
+     */
+    public Animation awaitNotification(Consumer<AwaitNotifyAnimationFrame.AwaitNotifyListener> listener) {
+        this.addFrame(new AwaitNotifyAnimationFrame(listener, -1));
+        return this;
+    }
+
+
+    /**
+     * Awaits a notification to proceed with the animation, with a specified timeout.
+     *
+     * @param timeout  the maximum time to wait for the notification, in ticks
+     * @param listener a consumer that accepts an `AwaitNotifyAnimationFrame.AwaitNotifyListener`
+     *                 to handle the notification process
+     * @return the current animation instance
+     */
+    public Animation awaitNotification(int timeout, Consumer<AwaitNotifyAnimationFrame.AwaitNotifyListener> listener) {
+        this.addFrame(new AwaitNotifyAnimationFrame(listener, -1));
+        return this;
+    }
 
     /**
      * Makes animation never end
