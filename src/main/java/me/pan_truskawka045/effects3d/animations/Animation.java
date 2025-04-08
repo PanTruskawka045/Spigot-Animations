@@ -82,6 +82,7 @@ public class Animation extends AbstractFrame {
      * Sets the animation exception handler
      *
      * @param exceptionHandler exception handler
+     * @return current animation
      */
     public Animation setExceptionHandler(BiConsumer<Exception, Animation> exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
@@ -263,10 +264,11 @@ public class Animation extends AbstractFrame {
     /**
      * Ease function with linear ease function
      *
-     * @param startValue first frame value
-     * @param endValue   last frame value
-     * @param step       step to take
-     * @param consumer   consumer to run
+     * @param startValue   first frame value
+     * @param endValue     last frame value
+     * @param easeFunction ease function to use
+     * @param step         step to take
+     * @param consumer     consumer to run
      * @return current animation
      */
     public Animation easeFunction(float startValue, float endValue, EaseFunction easeFunction, int step, Consumer<Float> consumer) {
