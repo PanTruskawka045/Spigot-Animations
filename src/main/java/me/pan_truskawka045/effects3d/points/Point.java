@@ -3,6 +3,8 @@ package me.pan_truskawka045.effects3d.points;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import me.pan_truskawka045.effects3d.numbers.QuaternionNumber;
+import me.pan_truskawka045.effects3d.vector.Vector;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -71,6 +73,28 @@ public class Point implements Cloneable {
         this.z = z;
     }
 
+    public void rotateAroundVector(float angle, @NotNull Vector vector) {
+        if (vector.isZero()) {
+            return;
+        }
+        if (!vector.isNormalised()) {
+            vector = vector.clone().normalise();
+        }
+
+        float sin = (float) Math.sin(angle / 2);
+        float cos = (float) Math.cos(angle / 2);
+
+        QuaternionNumber q1 = new QuaternionNumber(cos, vector.getX() * sin, vector.getY() * sin, vector.getZ() * sin);
+        QuaternionNumber point = new QuaternionNumber(0, x, y, z);
+        QuaternionNumber q2 = new QuaternionNumber(cos, -vector.getX() * sin, -vector.getY() * sin, -vector.getZ() * sin);
+
+        QuaternionNumber result = q1.multiply(point).multiply(q2);
+
+        this.x = (float) result.getImaginary();
+        this.y = (float) result.getJ();
+        this.z = (float) result.getK();
+    }
+
     public void scale(float scale) {
         x *= scale;
         y *= scale;
@@ -91,6 +115,10 @@ public class Point implements Cloneable {
 
     public float horizontalDistance(@NotNull Point point) {
         return (float) Math.sqrt(horizontalDistanceSquared(point));
+    }
+
+    public Vector toVector() {
+        return new Vector(x, y, z);
     }
 
     @Override
