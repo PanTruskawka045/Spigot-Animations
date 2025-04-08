@@ -29,7 +29,7 @@ dependencies {
 }
 
 group = 'me.pan_truskawka045'
-version = '1.1-SNAPSHOT'
+version = '1.2-SNAPSHOT'
 description = 'Spigot-Animations'
 
 
