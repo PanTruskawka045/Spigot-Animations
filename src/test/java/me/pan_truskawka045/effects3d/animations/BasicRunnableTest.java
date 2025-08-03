@@ -26,7 +26,7 @@ public class BasicRunnableTest {
     }
 
     @Test
-    public void testFinnish() {
+    public void testFinish() {
         AnimationManager manager = new AnimationManager();
         Animation animation = manager.newAnimation().finish();
         manager.tick();
