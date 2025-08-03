@@ -120,11 +120,7 @@ public class Space3DGraphics {
         }
         Point[] newPoints = new Point[points.length - 1];
         for (int i = 0; i < newPoints.length; i++) {
-            newPoints[i] = new Point(
-                    points[i].getX() + t * (points[i + 1].getX() - points[i].getX()),
-                    points[i].getY() + t * (points[i + 1].getY() - points[i].getY()),
-                    points[i].getZ() + t * (points[i + 1].getZ() - points[i].getZ())
-            );
+            newPoints[i] = lerp(points[i], points[i + 1], t);
         }
         return bezierCurveValue(t, newPoints);
     }
