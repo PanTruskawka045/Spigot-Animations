@@ -5,6 +5,10 @@ import me.pan_truskawka045.effects3d.animations.AbstractFrame;
 
 import java.util.function.Consumer;
 
+/**
+ * Animation frame that gradually changes a value from start to target with configurable step size and timing.
+ * Provides linear interpolation between two values over time with customizable increments.
+ */
 @RequiredArgsConstructor
 public class ValueFrame extends AbstractFrame {
     private final float startValue;

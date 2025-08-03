@@ -6,6 +6,10 @@ import me.pan_truskawka045.effects3d.animations.Animation;
 
 import java.util.Set;
 
+/**
+ * Animation frame that waits for specific parallel animations to complete.
+ * Monitors named parallel animations and finishes when all specified animations are done.
+ */
 @RequiredArgsConstructor
 public class JoinAnimationsFrame extends AbstractFrame {
 

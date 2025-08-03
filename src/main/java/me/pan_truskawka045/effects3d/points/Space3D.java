@@ -1,5 +1,6 @@
 package me.pan_truskawka045.effects3d.points;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.pan_truskawka045.effects3d.vector.Vector;
@@ -23,7 +24,7 @@ public class Space3D {
      * @param z z coordinate of the point
      * @return this
      */
-    public Space3D shiftAll(float x, float y, float z) {
+    public @NotNull Space3D shiftAll(float x, float y, float z) {
         points.forEach(point -> point.shift(x, y, z));
         return this;
     }
@@ -36,7 +37,7 @@ public class Space3D {
      * @param z z coordinate of the point
      * @return this
      */
-    public Space3D addPoint(float x, float y, float z) {
+    public @NotNull Space3D addPoint(float x, float y, float z) {
         points.add(new Point(x, y, z));
         return this;
     }
@@ -47,7 +48,8 @@ public class Space3D {
      * @param point point to add
      * @return this
      */
-    public Space3D addPoint(Point point) {
+    public @NotNull Space3D addPoint(@NotNull Point point) {
+        Preconditions.checkNotNull(point, "point cannot be null");
         points.add(point);
         return this;
     }
@@ -58,7 +60,8 @@ public class Space3D {
      * @param space source space to add points from
      * @return this
      */
-    public Space3D addAll(Space3D space) {
+    public @NotNull Space3D addAll(@NotNull Space3D space) {
+        Preconditions.checkNotNull(space, "space cannot be null");
         points.addAll(space.getPoints());
         return this;
     }
@@ -71,7 +74,7 @@ public class Space3D {
      * @param z z rotation angle (in radians)
      * @return this
      */
-    public Space3D rotateAll(float x, float y, float z) {
+    public @NotNull Space3D rotateAll(float x, float y, float z) {
         //TODO optimize (calculate sins and cosines only once)
         points.forEach(point -> point.rotate(x, y, z));
         return this;
@@ -83,7 +86,7 @@ public class Space3D {
      * @param angle rotation angle (in radians)
      * @return this
      */
-    public Space3D rotateAllX(float angle) {
+    public @NotNull Space3D rotateAllX(float angle) {
         points.forEach(point -> point.rotateX(angle));
         return this;
     }
@@ -94,7 +97,7 @@ public class Space3D {
      * @param angle rotation angle (in radians)
      * @return this
      */
-    public Space3D rotateAllY(float angle) {
+    public @NotNull Space3D rotateAllY(float angle) {
         points.forEach(point -> point.rotateY(angle));
         return this;
     }
@@ -105,12 +108,13 @@ public class Space3D {
      * @param angle rotation angle (in radians)
      * @return this
      */
-    public Space3D rotateAllZ(float angle) {
+    public @NotNull Space3D rotateAllZ(float angle) {
         points.forEach(point -> point.rotateZ(angle));
         return this;
     }
 
-    public Space3D rotateAllAroundVector(float angle, @NotNull Vector vector) {
+    public @NotNull Space3D rotateAllAroundVector(float angle, @NotNull Vector vector) {
+        Preconditions.checkNotNull(vector, "vector cannot be null");
         points.forEach(point -> point.rotateAroundVector(angle, vector));
         return this;
     }
@@ -121,7 +125,7 @@ public class Space3D {
      * @param scale scale factor
      * @return this
      */
-    public Space3D scaleX(float scale) {
+    public @NotNull Space3D scaleX(float scale) {
         points.forEach(point -> point.setX(point.getX() * scale));
         return this;
     }
@@ -132,42 +136,45 @@ public class Space3D {
      * @param scale scale factor
      * @return this
      */
-    public Space3D scaleY(float scale) {
+    public @NotNull Space3D scaleY(float scale) {
         points.forEach(point -> point.setY(point.getY() * scale));
         return this;
     }
 
     /**
-     * Scales all points by the given value on the Y axis
+     * Scales all points by the given value on the Z axis
      *
      * @param scale scale factor
      * @return this
      */
-    public Space3D scaleZ(float scale) {
+    public @NotNull Space3D scaleZ(float scale) {
         points.forEach(point -> point.setZ(point.getZ() * scale));
         return this;
     }
 
     /**
-     * Scales all points by the given values
-     *
-     * @param scaleX scale factor on the X axis
-     * @param scaleY scale factor on the Y axis
-     * @param scaleZ scale factor on the Z axis
-     * @return this
-     */
-    public Space3D scale(float scaleX, float scaleY, float scaleZ) {
-        return this.scaleX(scaleX).scaleY(scaleY).scaleZ(scaleZ);
-    }
-
-    /**
-     * Scales all points by the given value on all 3 axes
+     * Scales all points by the given value on all axes
      *
      * @param scale scale factor
      * @return this
      */
-    public Space3D scale(float scale) {
-        return this.scale(scale, scale, scale);
+    public @NotNull Space3D scale(float scale) {
+        points.forEach(point -> point.scale(scale));
+        return this;
+    }
+
+
+    /**
+     * Scales all points by the given values on each axis.
+     *
+     * @param scaleX scale factor for the X axis
+     * @param scaleY scale factor for the Y axis
+     * @param scaleZ scale factor for the Z axis
+     * @return this
+     */
+    public @NotNull Space3D scale(float scaleX, float scaleY, float scaleZ) {
+        points.forEach(point -> point.scale(scaleX, scaleY, scaleZ));
+        return this;
     }
 
     /**
@@ -176,7 +183,9 @@ public class Space3D {
      * @param scale scale factor
      * @return new space with scaled points
      */
-    public Space3D scaledCopy(float scale) {
+    public @NotNull Space3D scaledCopy(float scale) {
+        Preconditions.checkArgument(!Float.isNaN(scale), "scale cannot be NaN");
+        Preconditions.checkArgument(Float.isFinite(scale), "scale must be finite");
         return this.scaledCopy(scale, scale, scale);
     }
 
@@ -188,7 +197,13 @@ public class Space3D {
      * @param scaleZ scale factor on the Z axis
      * @return new space with scaled points
      */
-    public Space3D scaledCopy(float scaleX, float scaleY, float scaleZ) {
+    public @NotNull Space3D scaledCopy(float scaleX, float scaleY, float scaleZ) {
+        Preconditions.checkArgument(!Float.isNaN(scaleX), "scaleX cannot be NaN");
+        Preconditions.checkArgument(!Float.isNaN(scaleY), "scaleY cannot be NaN");
+        Preconditions.checkArgument(!Float.isNaN(scaleZ), "scaleZ cannot be NaN");
+        Preconditions.checkArgument(Float.isFinite(scaleX), "scaleX must be finite");
+        Preconditions.checkArgument(Float.isFinite(scaleY), "scaleY must be finite");
+        Preconditions.checkArgument(Float.isFinite(scaleZ), "scaleZ must be finite");
         Space3D space = new Space3D();
         this.points.forEach(point -> space.addPoint(point.clone()));
         space.scale(scaleX, scaleY, scaleZ);
@@ -203,7 +218,9 @@ public class Space3D {
      * @param second second point
      * @return list of points
      */
-    public List<Point> allInRange(Point first, Point second) {
+    public @NotNull List<Point> allInRange(@NotNull Point first, @NotNull Point second) {
+        Preconditions.checkNotNull(first, "first point cannot be null");
+        Preconditions.checkNotNull(second, "second point cannot be null");
         Point min = PointUtil.minPoint(first, second);
         Point max = PointUtil.maxPoint(first, second);
         List<Point> points = new ArrayList<>();
@@ -222,7 +239,9 @@ public class Space3D {
      * @param second second point
      * @return list of points
      */
-    public List<Point> allOutsideRange(Point first, Point second) {
+    public @NotNull List<Point> allOutsideRange(@NotNull Point first, @NotNull Point second) {
+        Preconditions.checkNotNull(first, "first point cannot be null");
+        Preconditions.checkNotNull(second, "second point cannot be null");
         Point min = PointUtil.minPoint(first, second);
         Point max = PointUtil.maxPoint(first, second);
         List<Point> points = new ArrayList<>();
@@ -241,7 +260,9 @@ public class Space3D {
      * @param distance distance
      * @return list of points
      */
-    public List<Point> allInDistance(Point point, float distance) {
+    public @NotNull List<Point> allInDistance(@NotNull Point point, float distance) {
+        Preconditions.checkNotNull(point, "point cannot be null");
+        Preconditions.checkArgument(distance >= 0, "distance must be non-negative");
         List<Point> points = new ArrayList<>();
         float distanceSquare = distance * distance;
         this.points.forEach(point1 -> {
@@ -253,21 +274,24 @@ public class Space3D {
     }
 
     /**
-     * Returns all points outside the given distance
+     * Returns all points outside the given distance from the reference point
      *
-     * @param point    point
-     * @param distance distance
-     * @return list of points
+     * @param point    reference point
+     * @param distance minimum distance
+     * @return list of points outside distance
      */
-    public List<Point> allOutsideDistance(Point point, float distance) {
-        List<Point> points = new ArrayList<>();
+    public @NotNull List<Point> allOutsideDistance(@NotNull Point point, float distance) {
+        Preconditions.checkNotNull(point, "point cannot be null");
+        Preconditions.checkArgument(distance >= 0, "distance must be non-negative");
+
+        List<Point> outsideDistance = new ArrayList<>();
         float distanceSquare = distance * distance;
         this.points.forEach(point1 -> {
             if (point.distanceSquare(point1) > distanceSquare) {
-                points.add(point1);
+                outsideDistance.add(point1);
             }
         });
-        return points;
+        return outsideDistance;
     }
 
     /*
@@ -285,7 +309,11 @@ public class Space3D {
      * @return this
      * @see Space3DGraphics#drawLine for more info
      */
-    public Space3D drawLine(Point point1, Point point2, float distanceBetweenPoints) {
+    public @NotNull Space3D drawLine(@NotNull Point point1, @NotNull Point point2, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(point1, "point1 cannot be null");
+        Preconditions.checkNotNull(point2, "point2 cannot be null");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+
         this.points.addAll(Space3DGraphics.drawLine(point1, point2, distanceBetweenPoints));
         return this;
     }
@@ -299,7 +327,10 @@ public class Space3D {
      * @return this
      * @see Space3DGraphics#drawCircle for more info
      */
-    public Space3D drawCircle(Point center, float radius, float distanceBetweenPoints) {
+    public @NotNull Space3D drawCircle(@NotNull Point center, float radius, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(center, "center cannot be null");
+        Preconditions.checkArgument(radius > 0, "radius must be positive");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
         this.points.addAll(Space3DGraphics.drawCircle(center, radius, distanceBetweenPoints));
         return this;
     }

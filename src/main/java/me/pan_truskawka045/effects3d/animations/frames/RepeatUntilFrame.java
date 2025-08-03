@@ -6,7 +6,10 @@ import me.pan_truskawka045.effects3d.animations.Animation;
 
 import java.util.function.Predicate;
 
-
+/**
+ * Animation frame that repeatedly executes a runnable until a condition is met.
+ * Continues execution with delays until the predicate returns true.
+ */
 @RequiredArgsConstructor
 public class RepeatUntilFrame extends AbstractFrame {
 

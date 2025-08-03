@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -23,6 +24,8 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     implementation group: 'org.jetbrains', name: 'annotations', version: '26.0.1'
 
+    implementation group: 'com.google.guava', name: 'guava', version: '33.4.8-jre'
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
@@ -32,6 +35,9 @@ group = 'me.pan_truskawka045'
 version = '1.2-SNAPSHOT'
 description = 'Spigot-Animations'
 
+shadowJar {
+    minimize()
+}
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -79,4 +85,8 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

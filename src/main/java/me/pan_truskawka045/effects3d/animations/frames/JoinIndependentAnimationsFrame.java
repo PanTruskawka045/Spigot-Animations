@@ -6,6 +6,10 @@ import me.pan_truskawka045.effects3d.animations.Animation;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * Animation frame that waits for a collection of independent animations to finish.
+ * Efficiently removes completed animations during ticking to optimize performance.
+ */
 public class JoinIndependentAnimationsFrame extends AbstractFrame {
 
     private final Collection<Animation> animations;

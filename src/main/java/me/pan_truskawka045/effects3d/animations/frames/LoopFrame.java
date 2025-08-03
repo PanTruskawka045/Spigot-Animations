@@ -6,6 +6,10 @@ import me.pan_truskawka045.effects3d.animations.AbstractFrame;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Animation frame that iterates through a list of values, consuming each one at specified intervals.
+ * Provides a way to sequence through different values over time.
+ */
 @RequiredArgsConstructor
 public class LoopFrame<T> extends AbstractFrame {
 

@@ -5,6 +5,10 @@ import me.pan_truskawka045.effects3d.animations.AbstractFrame;
 
 import java.util.function.Consumer;
 
+/**
+ * Animation frame that waits for external notification or timeout.
+ * Provides a listener interface for external code to notify completion.
+ */
 @RequiredArgsConstructor
 public class AwaitNotifyAnimationFrame extends AbstractFrame {
 

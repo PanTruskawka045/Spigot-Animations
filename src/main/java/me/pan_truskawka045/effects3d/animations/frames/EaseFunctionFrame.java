@@ -6,6 +6,10 @@ import me.pan_truskawka045.effects3d.animations.EaseFunction;
 
 import java.util.function.Consumer;
 
+/**
+ * Animation frame that animates a value using an easing function for smooth transitions.
+ * Interpolates between start and end values over a specified number of steps.
+ */
 @RequiredArgsConstructor
 public class EaseFunctionFrame extends AbstractFrame {
 

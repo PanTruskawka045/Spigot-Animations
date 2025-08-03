@@ -101,6 +101,12 @@ public class Point implements Cloneable {
         z *= scale;
     }
 
+    public void scale(float scaleX, float scaleY, float scaleZ) {
+        x *= scaleX;
+        y *= scaleY;
+        z *= scaleZ;
+    }
+
     public float distance(@NotNull Point point) {
         return (float) Math.sqrt(distanceSquare(point));
     }

@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import me.pan_truskawka045.effects3d.animations.AbstractFrame;
 import me.pan_truskawka045.effects3d.animations.Animation;
 
+/**
+ * Animation frame that stops the parent animation.
+ * Executes once and immediately finishes, causing the animation to terminate.
+ */
 @RequiredArgsConstructor
-public class FinnishFrame extends AbstractFrame {
+public class FinishFrame extends AbstractFrame {
 
     private final Animation animation;
     @Override

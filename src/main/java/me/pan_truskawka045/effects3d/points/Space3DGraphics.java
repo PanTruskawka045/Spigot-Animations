@@ -1,5 +1,6 @@
 package me.pan_truskawka045.effects3d.points;
 
+import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,11 @@ public class Space3DGraphics {
      * @param distanceBetweenPoints distance between two points (might change a bit)
      * @return list of created points
      */
-    public List<Point> drawLine(Point point1, Point point2, float distanceBetweenPoints) {
+    public @NotNull List<Point> drawLine(@NotNull Point point1, @NotNull Point point2, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(point1, "point1 cannot be null");
+        Preconditions.checkNotNull(point2, "point2 cannot be null");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+
         double diffX = point2.getX() - point1.getX();
         double diffY = point2.getY() - point1.getY();
         double diffZ = point2.getZ() - point1.getZ();
@@ -51,7 +56,11 @@ public class Space3DGraphics {
      * @param distanceBetweenPoints distance between two points (might change a bit)
      * @return list of created points
      */
-    public List<Point> drawCircle(Point center, float radius, float distanceBetweenPoints) {
+    public @NotNull List<Point> drawCircle(@NotNull Point center, float radius, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(center, "center cannot be null");
+        Preconditions.checkArgument(radius > 0, "radius must be positive");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+
         List<Point> points = new LinkedList<>();
         float circumference = (float) (2 * Math.PI * radius);
         int pointsCount = (int) (circumference / distanceBetweenPoints);
@@ -66,7 +75,15 @@ public class Space3DGraphics {
         return points;
     }
 
-    public Point[] bezierCurve(float distanceBetweenPoints, int precision, Point... points) {
+    public @NotNull Point[] bezierCurve(float distanceBetweenPoints, int precision, @NotNull Point... points) {
+        Preconditions.checkNotNull(points, "points array cannot be null");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+        Preconditions.checkArgument(precision > 0, "precision must be positive");
+
+        for (int i = 0; i < points.length; i++) {
+            Preconditions.checkNotNull(points[i], "Point at index " + i + " cannot be null");
+        }
+
         Point[] values = new Point[precision];
         for (int i = 0; i < precision; i++) {
             float t = (float) i / (precision - 1);
@@ -82,7 +99,14 @@ public class Space3DGraphics {
         return bezierCurve((int) (distance / distanceBetweenPoints), points);
     }
 
-    public Point[] bezierCurve(int amountOfPoints, Point... points) {
+    public @NotNull Point[] bezierCurve(int amountOfPoints, @NotNull Point... points) {
+        Preconditions.checkNotNull(points, "points array cannot be null");
+        Preconditions.checkArgument(amountOfPoints > 0, "amountOfPoints must be positive");
+
+        for (int i = 0; i < points.length; i++) {
+            Preconditions.checkNotNull(points[i], "Point at index " + i + " cannot be null");
+        }
+
         Point[] values = new Point[amountOfPoints];
         for (int i = 0; i < amountOfPoints; i++) {
             float t = (float) i / (amountOfPoints - 1);
@@ -104,7 +128,13 @@ public class Space3DGraphics {
         return remappedValues;
     }
 
-    public Point bezierCurveValue(float t, Point... points) {
+    public @NotNull Point bezierCurveValue(float t, @NotNull Point... points) {
+        Preconditions.checkNotNull(points, "points array cannot be null");
+
+        for (int i = 0; i < points.length; i++) {
+            Preconditions.checkNotNull(points[i], "Point at index " + i + " cannot be null");
+        }
+
         if (points.length == 0) {
             throw new IllegalArgumentException("At least one point is required");
         }
@@ -126,7 +156,10 @@ public class Space3DGraphics {
     }
 
 
-    public float distToT(float[] LUT, float distance) {
+    public float distToT(@NotNull float[] LUT, float distance) {
+        Preconditions.checkNotNull(LUT, "LUT array cannot be null");
+        Preconditions.checkArgument(LUT.length > 0, "LUT array cannot be empty");
+
         float arcLength = LUT[LUT.length - 1]; // total arc length
         int n = LUT.length; // sample count
 
@@ -156,13 +189,19 @@ public class Space3DGraphics {
     }
 
 
-    public List<Point> semiLightningLine(Point start,
+    public @NotNull List<Point> semiLightningLine(@NotNull Point start,
                                          int bends,
                                          float horizontalAngle,
                                          float verticalAngle,
                                          float distanceBetweenPoints,
                                          float distanceBetweenBends,
-                                         Point direction) {
+                                         @NotNull Point direction) {
+        Preconditions.checkNotNull(start, "start point cannot be null");
+        Preconditions.checkNotNull(direction, "direction point cannot be null");
+        Preconditions.checkArgument(bends >= 0, "bends must be non-negative");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+        Preconditions.checkArgument(distanceBetweenBends > 0, "distanceBetweenBends must be positive");
+
         List<Point> points = new LinkedList<>();
 
         Point lastPoint = start;
@@ -191,7 +230,18 @@ public class Space3DGraphics {
         return points;
     }
 
-    public Point lerp(@NotNull Point point, @NotNull Point target, float alpha) {
+    /**
+     * Linearly interpolates between two points in 3D space.
+     *
+     * @param point the starting {@link Point}
+     * @param target the target {@link Point}
+     * @param alpha the interpolation factor (0.0 = point, 1.0 = target)
+     * @return a new {@link Point} representing the interpolated position
+     */
+    public @NotNull Point lerp(@NotNull Point point, @NotNull Point target, float alpha) {
+        Preconditions.checkNotNull(point, "point cannot be null");
+        Preconditions.checkNotNull(target, "target cannot be null");
+
         return new Point(
                 point.getX() + (target.getX() - point.getX()) * alpha,
                 point.getY() + (target.getY() - point.getY()) * alpha,
@@ -199,7 +249,22 @@ public class Space3DGraphics {
         );
     }
 
-    public List<Point> drawQuadratic(@NotNull Point point1, @NotNull Point point2, float aFactor, float distanceBetweenPoints) {
+    /**
+     * Draws a quadratic curve between two points in 3D space.
+     * The curve is defined by a quadratic function with the specified factor, and points are generated along the curve
+     * at intervals determined by distanceBetweenPoints.
+     *
+     * @param point1 the starting {@link Point} of the curve
+     * @param point2 the ending {@link Point} of the curve
+     * @param aFactor the quadratic factor that determines the curvature
+     * @param distanceBetweenPoints the distance between each generated point along the curve
+     * @return a list of {@link Point} objects representing the quadratic curve
+     */
+    public @NotNull List<Point> drawQuadratic(@NotNull Point point1, @NotNull Point point2, float aFactor, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(point1, "point1 cannot be null");
+        Preconditions.checkNotNull(point2, "point2 cannot be null");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+
         List<Point> points = new LinkedList<>();
         float horizontalDistance = point1.horizontalDistance(point2);
         float halfDistance = horizontalDistance / 2;
@@ -235,6 +300,5 @@ public class Space3DGraphics {
         }
         return points;
     }
-
 
 }

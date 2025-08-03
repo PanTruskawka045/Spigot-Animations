@@ -7,6 +7,10 @@ import me.pan_truskawka045.effects3d.animations.values.EaseValue;
 
 import java.util.function.Consumer;
 
+/**
+ * Animation frame that animates multiple values simultaneously using different easing functions.
+ * Applies easing functions to multiple values and provides them as an array to the consumer.
+ */
 @RequiredArgsConstructor
 public class MultipleEaseFunctionsFrame extends AbstractFrame {
 
