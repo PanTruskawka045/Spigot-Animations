@@ -11,6 +11,7 @@ Despite the name, this library can be used in any Java project, not just Spigot 
 - Parallel and joined animations
 - Value easing functions (linear, quadratic, etc.)
 - Conditional, and notification-based frames
+- Utils for basic math operations in 3D space
 
 ---
 
