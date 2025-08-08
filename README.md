@@ -1,6 +1,7 @@
 # 🎬 Spigot-Animations
 
-A powerful and flexible animation library for Spigot plugins, designed to make creating complex, chained, and parallel animations easy and fun!
+An animation library for Spigot plugins, designed to make creating chained, and parallel animations easy and fun!
+Despite the name, this library can be used in any Java project, not just Spigot plugins.
 
 ---
 
