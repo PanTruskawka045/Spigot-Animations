@@ -60,9 +60,9 @@ Point p2 = new Point(5, 5, 5);
 p1.shift(1, 2, 3); // p1 is now (1, 2, 3)
 
 // Rotate a point around axes
-p2.rotateX((float)Math.PI / 2);
-p2.rotateY((float)Math.PI / 4);
-p2.rotateZ((float)Math.PI / 6);
+p2.rotateX(Math.PI / 2);
+p2.rotateY(Math.PI / 4);
+p2.rotateZ(Math.PI / 6);
 
 // Calculate distance between points
 float dist = p1.distance(p2);
