@@ -17,7 +17,7 @@ Despite the name, this library can be used in any Java project, not just Spigot 
 
 ## 🚀 Example Usage
 
-### Animation Setup: 
+### Animations Setup: 
 ```java
 //Create instance of AnimationManager
 final AnimationManager animationManager = new AnimationManager();
@@ -27,11 +27,11 @@ final AnimationManager animationManager = new AnimationManager();
 void tick(){
     animationManager.tick();
 }
-//Spigot Example:
+//Spigot Example: (Put this code in your plugin, in onEnable method)
 Bukkit.getScheduler().runTaskTimer(plugin, animationManager::tick, 0L, 1L);
 ```
 
-### Animation example usage:
+### Example animation:
 ```java
     animationManager
         .newAnimation().
@@ -50,7 +50,7 @@ Bukkit.getScheduler().runTaskTimer(plugin, animationManager::tick, 0L, 1L);
 
 ```
 
-### Example usage of 3D point and space classes
+### 3D math utilities example
 
 ```java
 // Create points
@@ -64,13 +64,14 @@ p1.shift(1, 2, 3); // p1 is now (1, 2, 3)
 p2.rotateX(Math.PI / 2);
 p2.rotateY(Math.PI / 4);
 p2.rotateZ(Math.PI / 6);
+//or with one method
+p2.rotate(Math.PI / 2, Math.PI / 4, Math.PI / 6); 
 
-// Calculate distance between points
-float dist = p1.distance(p2);
 
 // Create a 3D space and add points
 Space3D space = new Space3D();
 space.addPoint(p1).addPoint(p2);
+//Most of the operations, available on a point, can be done on the whole space.
 
 // Shift all points in space
 space.shiftAll(2, 0, -1);
