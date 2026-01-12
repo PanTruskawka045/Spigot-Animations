@@ -55,7 +55,7 @@ publishing {
     repositories {
         maven {
             name = "developmentRepository"
-            url = "https://repo.pantruskawka045.me/private"
+            url = "https://repo.pantruskawka045.me/public"
             credentials(PasswordCredentials)
             authentication {
                 basic(BasicAuthentication)
