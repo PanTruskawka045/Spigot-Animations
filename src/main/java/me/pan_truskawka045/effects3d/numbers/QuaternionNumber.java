@@ -12,13 +12,13 @@ import org.jetbrains.annotations.NotNull;
  * 'b', 'c', 'd' are the coefficients of the fundamental quaternion units i, j, k respectively.
  * Quaternions are used extensively in 3D graphics for representing rotations.</p>
  *
- * <p>The quaternion multiplication follows Hamilton's rules:
+ * <p>The quaternion multiplication follows Hamilton's rules:</p>
  * <ul>
  * <li>i² = j² = k² = ijk = -1</li>
  * <li>ij = k, ji = -k</li>
  * <li>jk = i, kj = -i</li>
  * <li>ki = j, ik = -j</li>
- * </ul></p>
+ * </ul>
  *
  * <p>Like its parent classes, QuaternionNumber instances are immutable - all operations return new
  * instances rather than modifying the existing object.</p>

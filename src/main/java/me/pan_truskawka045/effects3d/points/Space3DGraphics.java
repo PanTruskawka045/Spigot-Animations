@@ -190,12 +190,12 @@ public class Space3DGraphics {
 
 
     public @NotNull List<Point> semiLightningLine(@NotNull Point start,
-                                         int bends,
-                                         float horizontalAngle,
-                                         float verticalAngle,
-                                         float distanceBetweenPoints,
-                                         float distanceBetweenBends,
-                                         @NotNull Point direction) {
+                                                  int bends,
+                                                  float horizontalAngle,
+                                                  float verticalAngle,
+                                                  float distanceBetweenPoints,
+                                                  float distanceBetweenBends,
+                                                  @NotNull Point direction) {
         Preconditions.checkNotNull(start, "start point cannot be null");
         Preconditions.checkNotNull(direction, "direction point cannot be null");
         Preconditions.checkArgument(bends >= 0, "bends must be non-negative");
@@ -233,9 +233,9 @@ public class Space3DGraphics {
     /**
      * Linearly interpolates between two points in 3D space.
      *
-     * @param point the starting {@link Point}
+     * @param point  the starting {@link Point}
      * @param target the target {@link Point}
-     * @param alpha the interpolation factor (0.0 = point, 1.0 = target)
+     * @param alpha  the interpolation factor (0.0 = point, 1.0 = target)
      * @return a new {@link Point} representing the interpolated position
      */
     public @NotNull Point lerp(@NotNull Point point, @NotNull Point target, float alpha) {
@@ -254,9 +254,9 @@ public class Space3DGraphics {
      * The curve is defined by a quadratic function with the specified factor, and points are generated along the curve
      * at intervals determined by distanceBetweenPoints.
      *
-     * @param point1 the starting {@link Point} of the curve
-     * @param point2 the ending {@link Point} of the curve
-     * @param aFactor the quadratic factor that determines the curvature
+     * @param point1                the starting {@link Point} of the curve
+     * @param point2                the ending {@link Point} of the curve
+     * @param aFactor               the quadratic factor that determines the curvature
      * @param distanceBetweenPoints the distance between each generated point along the curve
      * @return a list of {@link Point} objects representing the quadratic curve
      */
@@ -298,6 +298,59 @@ public class Space3DGraphics {
             points.add(new Point(linear3.getX(), y3, linear3.getZ()));
             currentX += derivedDistance;
         }
+        return points;
+    }
+
+    /**
+     * Draws the wireframe of a cube defined by two opposite corners.
+     *
+     * @param point1                one corner of the cube
+     * @param point2                the opposite corner of the cube
+     * @param distanceBetweenPoints the distance between each generated point along the edges
+     * @return a list of {@link Point} objects representing the wireframe of the cube
+     */
+    public @NotNull List<Point> drawCubeWireframes(@NotNull Point point1, @NotNull Point point2, float distanceBetweenPoints) {
+        Preconditions.checkNotNull(point1, "point1 cannot be null");
+        Preconditions.checkNotNull(point2, "point2 cannot be null");
+        Preconditions.checkArgument(distanceBetweenPoints > 0, "distanceBetweenPoints must be positive");
+
+        List<Point> points = new LinkedList<>();
+
+        // Bottom face
+        double minX = Math.min(point1.getX(), point2.getX());
+        double maxX = Math.max(point1.getX(), point2.getX());
+        double minY = Math.min(point1.getY(), point2.getY());
+        double maxY = Math.max(point1.getY(), point2.getY());
+        double minZ = Math.min(point1.getZ(), point2.getZ());
+        double maxZ = Math.max(point1.getZ(), point2.getZ());
+
+        Point p000 = new Point(minX, minY, minZ);
+        Point p100 = new Point(maxX, minY, minZ);
+        Point p010 = new Point(minX, maxY, minZ);
+        Point p110 = new Point(maxX, maxY, minZ);
+        Point p001 = new Point(minX, minY, maxZ);
+        Point p101 = new Point(maxX, minY, maxZ);
+        Point p011 = new Point(minX, maxY, maxZ);
+        Point p111 = new Point(maxX, maxY, maxZ);
+
+        // Bottom face
+        points.addAll(drawLine(p000, p100, distanceBetweenPoints));
+        points.addAll(drawLine(p100, p101, distanceBetweenPoints));
+        points.addAll(drawLine(p101, p001, distanceBetweenPoints));
+        points.addAll(drawLine(p001, p000, distanceBetweenPoints));
+
+        // Top face
+        points.addAll(drawLine(p010, p110, distanceBetweenPoints));
+        points.addAll(drawLine(p110, p111, distanceBetweenPoints));
+        points.addAll(drawLine(p111, p011, distanceBetweenPoints));
+        points.addAll(drawLine(p011, p010, distanceBetweenPoints));
+
+        // Vertical edges
+        points.addAll(drawLine(p000, p010, distanceBetweenPoints));
+        points.addAll(drawLine(p100, p110, distanceBetweenPoints));
+        points.addAll(drawLine(p101, p111, distanceBetweenPoints));
+        points.addAll(drawLine(p001, p011, distanceBetweenPoints));
+
         return points;
     }
 
