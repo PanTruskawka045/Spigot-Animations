@@ -267,6 +267,9 @@ public class Space3DGraphics {
 
         List<Point> points = new LinkedList<>();
         float horizontalDistance = point1.horizontalDistance(point2);
+
+        Preconditions.checkArgument(horizontalDistance > 0, "horizontal distance between points must be positive");
+
         float halfDistance = horizontalDistance / 2;
         float currentX = -halfDistance;
 
@@ -299,6 +302,34 @@ public class Space3DGraphics {
             currentX += derivedDistance;
         }
         return points;
+    }
+
+    /**
+     * Computes the quadratic coefficient \(a\) for a symmetric quadratic curve that
+     * reaches the specified peak height at the midpoint between two points.
+     * <p>
+     * The quadratic shape used is centered at the midpoint and has the form
+     * y = a * x^2 (relative to the midpoint). Given a horizontal distance d between
+     * the two points and desired peak height h, the coefficient is:
+     * a = 4 * h / d^2
+     * <p>
+     * Note: if the horizontal distance between the points is zero, the result may
+     * be Infinity or NaN.
+     *
+     * @param point1     first end point (must not be null)
+     * @param point2     second end point (must not be null)
+     * @param peakHeight desired peak vertex height above the line connecting the two points
+     * @return the quadratic coefficient \`a\` producing the requested peak height
+     */
+    public float computeQuadraticCoefficient(@NotNull Point point1, @NotNull Point point2, float peakHeight) {
+        Preconditions.checkNotNull(point1, "point1 cannot be null");
+        Preconditions.checkNotNull(point2, "point2 cannot be null");
+
+        float horizontalDistance = point1.horizontalDistance(point2);
+
+        Preconditions.checkArgument(horizontalDistance > 0, "horizontal distance between points must be positive");
+
+        return (4 * peakHeight) / (horizontalDistance * horizontalDistance);
     }
 
     /**
