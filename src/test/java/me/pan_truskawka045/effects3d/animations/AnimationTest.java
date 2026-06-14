@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -117,6 +118,23 @@ public class AnimationTest {
         Field animationsField = manager.getClass().getDeclaredField("animations");
         animationsField.setAccessible(true);
         assertEquals(0, ((java.util.List<?>) animationsField.get(manager)).size());
+    }
+
+    @Test
+    public void stoppedAnimationsAreNotRetainedByManager() throws Exception {
+        Animation managedAnimation = manager.newAnimation();
+        managedAnimation.stop();
+        manager.of().stop();
+
+        manager.tick();
+
+        Field animationsField = AnimationManager.class.getDeclaredField("animations");
+        animationsField.setAccessible(true);
+        assertTrue(((Collection<?>) animationsField.get(manager)).isEmpty());
+
+        Field animationsToRemoveField = AnimationManager.class.getDeclaredField("animationsToRemove");
+        animationsToRemoveField.setAccessible(true);
+        assertTrue(((Collection<?>) animationsToRemoveField.get(manager)).isEmpty());
     }
 
     @Test

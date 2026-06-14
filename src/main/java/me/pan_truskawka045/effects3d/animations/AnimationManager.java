@@ -1,14 +1,17 @@
 package me.pan_truskawka045.effects3d.animations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class AnimationManager {
 
     private final List<Animation> animations = new ArrayList<>();
-    private final List<Animation> animationsToRemove = new ArrayList<>();
+    private final Set<Animation> animationsToRemove = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Object SYNC = new Object();
 
     /**
@@ -16,19 +19,25 @@ public class AnimationManager {
      */
     public void tick() {
         synchronized (SYNC) {
-            Iterator<Animation> iterator = animations.iterator();
-            while (iterator.hasNext()) {
-                try {
+            try {
+                Iterator<Animation> iterator = animations.iterator();
+                while (iterator.hasNext()) {
                     Animation animation = iterator.next();
-                    if (animation.isFinished() || animationsToRemove.contains(animation)) {
-                        animation.stop();
+                    if (animation.isFinished() || animationsToRemove.remove(animation)) {
                         iterator.remove();
                         continue;
                     }
                     animation.tick();
-                } catch (ConcurrentModificationException e) {
-                    break;
+
+                    if (animationsToRemove.remove(animation)) {
+                        iterator.remove();
+                    }
                 }
+            } catch (ConcurrentModificationException ignored) {
+                // An animation may create another managed animation while being ticked.
+            } finally {
+                animations.removeAll(animationsToRemove);
+                animationsToRemove.clear();
             }
         }
     }
@@ -61,7 +70,9 @@ public class AnimationManager {
      * @param animation animation to stop
      */
     public void stopAnimation(Animation animation) {
-        animationsToRemove.add(animation);
+        synchronized (SYNC) {
+            animationsToRemove.add(animation);
+        }
     }
 
     /**
